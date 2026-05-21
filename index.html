@@ -37,8 +37,19 @@
     }
 
     h1 { font-size: 2.2rem; margin-bottom: 6px; line-height: 1.2; }
+    .subtitle { color: #888; font-size: 0.95rem; margin-bottom: 16px; }
 
-    .subtitle { color: #888; font-size: 0.95rem; margin-bottom: 32px; }
+    /* Streak banner */
+    .streak {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      min-height: 28px;
+      transition: all 0.3s ease;
+    }
+
+    .streak.hot { color: #ff6b9d; animation: popIn 0.4s ease; }
+    .streak.cold { color: #bbb; }
 
     .joke-box {
       min-height: 130px;
@@ -147,7 +158,6 @@
       gap: 8px;
       margin-top: 28px;
       border-bottom: 2px solid #eee;
-      padding-bottom: 0;
     }
 
     .tab {
@@ -170,8 +180,7 @@
     .tab-panel { display: none; padding-top: 18px; }
     .tab-panel.active { display: block; }
 
-    /* Liked jokes list */
-    .liked-list, .top-list { text-align: left; }
+    .liked-list { text-align: left; }
 
     .joke-item {
       background: #f9f9f9;
@@ -186,13 +195,49 @@
 
     .empty-state { color: #ccc; font-size: 0.95rem; padding: 16px 0; }
 
-    /* Trophy screen */
+    /* Trophy */
     .trophy-wrap { padding: 10px 0 4px; }
     .trophy-icon { font-size: 3rem; display: block; margin-bottom: 8px; }
     .trophy-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #aaa; margin-bottom: 6px; }
     .trophy-setup { font-size: 1.1rem; font-weight: 700; color: #333; margin-bottom: 6px; }
     .trophy-punchline { font-size: 1rem; color: #e04f5f; font-weight: 700; }
     .trophy-empty { color: #ccc; font-size: 0.95rem; }
+
+    /* Print button */
+    .btn-print {
+      background: linear-gradient(135deg, #a8d8f0, #7ec8e3);
+      color: #1a6a8a;
+      border: none;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 10px 20px;
+      margin-top: 14px;
+      transition: all 0.15s ease;
+    }
+    .btn-print:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(126,200,227,0.5); }
+
+    /* Print styles */
+    @media print {
+      body { background: white; padding: 0; }
+      .card { box-shadow: none; max-width: 100%; padding: 20px; }
+      .joke-box, .vote-row, .tabs, #mainBtn, .counter, .streak, .footer-emoji,
+      #panel-trophy, .btn-print, #tabs { display: none !important; }
+      #panel-liked { display: block !important; }
+      .joke-item { break-inside: avoid; border: 1px solid #eee; }
+      h1 { font-size: 1.6rem; }
+      .subtitle { display: none; }
+      .print-header { display: block !important; }
+    }
+
+    .print-header {
+      display: none;
+      text-align: center;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      color: #888;
+    }
   </style>
 </head>
 <body>
@@ -200,6 +245,8 @@
     <span class="footer-emoji" id="emoji">😄</span>
     <h1>Kid Joke Generator</h1>
     <p class="subtitle">Clean, silly jokes for everyone!</p>
+
+    <div class="streak cold" id="streak"></div>
 
     <div class="joke-box" id="jokeBox">
       <p class="placeholder">Press the button for a joke!</p>
@@ -218,7 +265,11 @@
     </div>
 
     <div id="panel-liked" class="tab-panel active">
+      <p class="print-header">My Favorite Jokes</p>
       <div class="liked-list" id="likedList"></div>
+      <div id="printBtnWrap" style="display:none; text-align:center">
+        <button class="btn-print" onclick="window.print()">🖨️ Print my favorites</button>
+      </div>
     </div>
 
     <div id="panel-trophy" class="tab-panel">
@@ -257,18 +308,39 @@
       { setup: "How do you make a tissue dance?", punchline: "You put a little boogie in it!" },
       { setup: "What do you call a boomerang that won't come back?", punchline: "A stick!" },
       { setup: "Why did the teddy bear say no to dessert?", punchline: "Because she was already stuffed!" },
+      { setup: "What do you call a cow with no legs?", punchline: "Ground beef!" },
+      { setup: "Why did the orange stop rolling down the hill?", punchline: "Because it ran out of juice!" },
+      { setup: "What do you call a snowman with a six-pack?", punchline: "An abdominal snowman!" },
+      { setup: "Why did the robot go on a diet?", punchline: "Because it had too many bytes!" },
+      { setup: "What do you call a pig that does karate?", punchline: "A pork chop!" },
+      { setup: "Why did the music teacher need a ladder?", punchline: "To reach the high notes!" },
+      { setup: "What do you call a duck that gets all A's?", punchline: "A wise quacker!" },
+      { setup: "Why can't a nose be 12 inches long?", punchline: "Because then it would be a foot!" },
+      { setup: "What do you call two bananas?", punchline: "A pair of slippers!" },
+      { setup: "What do you call a sad strawberry?", punchline: "A blueberry!" },
+      { setup: "Why did the clock go to the principal's office?", punchline: "Because it tocked too much!" },
+      { setup: "Why did the frog take the bus?", punchline: "Because his car got toad!" },
+      { setup: "Why did the tree go to the dentist?", punchline: "To get a root canal!" },
+      { setup: "What do you call a funny mountain?", punchline: "Hill-arious!" },
+      { setup: "Why did the elephant bring a suitcase to the jungle?", punchline: "Because it had a big trunk!" },
+      { setup: "What do you call a cold dog?", punchline: "A chili dog!" },
+      { setup: "Why did the astronaut break up with the moon?", punchline: "Because she needed some space!" },
+      { setup: "What do you call a superhero who works at a bakery?", punchline: "Bun-man!" },
+      { setup: "Why did the broom get promoted?", punchline: "Because it swept the competition!" },
+      { setup: "What do you call a fish with no tail?", punchline: "A lost cause!" },
+      { setup: "Why did the teddy bear skip lunch?", punchline: "Because she was already stuffed!" },
     ];
 
-    // jokes with 2+ downvotes get skipped
     const SKIP_THRESHOLD = 2;
 
     let state = 'idle';
     let currentJoke = null;
     let currentIdx = null;
-    let usedIndices = [];
+    let deck = [];
     let jokeCount = 0;
-    const votes = {}; // idx -> net score
-    const downCount = {}; // idx -> raw downvote count
+    let likeStreak = 0;
+    const votes = {};
+    const downCount = {};
 
     const emojis = ['😄','🤣','😂','🐸','🦄','🐧','🌈','🎉','🐢','🦊','🎈','🐙'];
 
@@ -286,6 +358,130 @@
       "👎 Booooo!",
     ];
 
+    const streakMessages = [
+      '', '', // 0, 1 — no message
+      '🔥 2 in a row!',
+      '🔥🔥 3 knee-slappers in a row!',
+      '🔥🔥🔥 4 in a row — you\'re on fire!',
+      '🚀 5 in a row!! Comedy legend!!',
+    ];
+
+    // --- Sound effects via Web Audio API ---
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    const likeSounds = [
+      // Classic rimshot: ba-dum-tss
+      function() {
+        const t = ctx.currentTime;
+        // noise hi-hat
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+        const src = ctx.createBufferSource(); src.buffer = buf;
+        const hpf = ctx.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = 8000;
+        src.connect(hpf);
+        // snare
+        const snare = ctx.createOscillator(); const snareGain = ctx.createGain();
+        snare.frequency.value = 180;
+        snareGain.gain.setValueAtTime(0.4, t + 0.12); snareGain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+        snare.connect(snareGain);
+        // kick
+        const kick = ctx.createOscillator(); const kickGain = ctx.createGain();
+        kick.frequency.setValueAtTime(150, t); kick.frequency.exponentialRampToValueAtTime(40, t + 0.1);
+        kickGain.gain.setValueAtTime(1, t); kickGain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+        kick.connect(kickGain);
+        const master = ctx.createGain(); master.gain.value = 0.6;
+        hpf.connect(master); snareGain.connect(master); kickGain.connect(master); master.connect(ctx.destination);
+        src.start(t); src.stop(t + 0.05);
+        snare.start(t + 0.12); snare.stop(t + 0.28);
+        kick.start(t); kick.stop(t + 0.2);
+      },
+      // Ascending "ta-da!" fanfare
+      function() {
+        const t = ctx.currentTime;
+        [[523, 0], [659, 0.12], [784, 0.24], [1047, 0.36]].forEach(([freq, delay]) => {
+          const osc = ctx.createOscillator(); const gain = ctx.createGain();
+          osc.type = 'triangle'; osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.35, t + delay); gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.25);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(t + delay); osc.stop(t + delay + 0.25);
+        });
+      },
+      // Bouncy boing
+      function() {
+        const t = ctx.currentTime;
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(300, t); osc.frequency.exponentialRampToValueAtTime(900, t + 0.15);
+        osc.frequency.exponentialRampToValueAtTime(600, t + 0.3);
+        gain.gain.setValueAtTime(0.5, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t); osc.stop(t + 0.4);
+      },
+      // Three cheerful pings
+      function() {
+        const t = ctx.currentTime;
+        [880, 1100, 1320].forEach((freq, i) => {
+          const osc = ctx.createOscillator(); const gain = ctx.createGain();
+          osc.type = 'sine'; osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.3, t + i * 0.13); gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.13 + 0.2);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(t + i * 0.13); osc.stop(t + i * 0.13 + 0.2);
+        });
+      },
+    ];
+
+    const dislikeSounds = [
+      // Classic womp-womp trombone
+      function() {
+        const t = ctx.currentTime;
+        [0, 0.35, 0.65].forEach((delay, i) => {
+          const osc = ctx.createOscillator(); const gain = ctx.createGain();
+          const startFreq = [220, 185, 155][i]; const endFreq = [185, 155, 110][i];
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(startFreq, t + delay); osc.frequency.linearRampToValueAtTime(endFreq, t + delay + 0.28);
+          gain.gain.setValueAtTime(0.25, t + delay); gain.gain.linearRampToValueAtTime(0, t + delay + 0.3);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(t + delay); osc.stop(t + delay + 0.3);
+        });
+      },
+      // Sad descending scale
+      function() {
+        const t = ctx.currentTime;
+        [523, 440, 349, 262].forEach((freq, i) => {
+          const osc = ctx.createOscillator(); const gain = ctx.createGain();
+          osc.type = 'triangle'; osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.3, t + i * 0.15); gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.15 + 0.2);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(t + i * 0.15); osc.stop(t + i * 0.15 + 0.2);
+        });
+      },
+      // Buzzer
+      function() {
+        const t = ctx.currentTime;
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sawtooth'; osc.frequency.value = 120;
+        gain.gain.setValueAtTime(0.3, t); gain.gain.linearRampToValueAtTime(0, t + 0.6);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t); osc.stop(t + 0.6);
+      },
+      // Deflating balloon
+      function() {
+        const t = ctx.currentTime;
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(600, t); osc.frequency.exponentialRampToValueAtTime(80, t + 0.7);
+        gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.7);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t); osc.stop(t + 0.7);
+      },
+    ];
+
+    function playLikeSound()    { pick(likeSounds)(); }
+    function playDislikeSound() { pick(dislikeSounds)(); }
+
     function randomEmoji() {
       return emojis[Math.floor(Math.random() * emojis.length)];
     }
@@ -294,19 +490,33 @@
       return (downCount[idx] || 0) >= SKIP_THRESHOLD;
     }
 
-    function pickJoke() {
+    function buildDeck() {
       const eligible = jokes.map((_, i) => i).filter(i => !isBanned(i));
-      if (eligible.length === 0) return Math.floor(Math.random() * jokes.length); // fallback
+      for (let i = eligible.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [eligible[i], eligible[j]] = [eligible[j], eligible[i]];
+      }
+      return eligible;
+    }
 
-      // reset used list if all eligible jokes have been seen
-      const unseenEligible = eligible.filter(i => !usedIndices.includes(i));
-      if (unseenEligible.length === 0) usedIndices = [];
-
-      const pool = eligible.filter(i => !usedIndices.includes(i));
-      const idx = pool[Math.floor(Math.random() * pool.length)];
-      usedIndices.push(idx);
+    function pickJoke() {
+      if (deck.length === 0) deck = buildDeck();
+      if (deck.length === 0) deck = jokes.map((_, i) => i);
+      const idx = deck.shift();
       currentIdx = idx;
       return jokes[idx];
+    }
+
+    function updateStreak() {
+      const el = document.getElementById('streak');
+      if (likeStreak < 2) {
+        el.textContent = '';
+        el.className = 'streak cold';
+      } else {
+        const msg = streakMessages[Math.min(likeStreak, streakMessages.length - 1)];
+        el.textContent = msg;
+        el.className = 'streak hot';
+      }
     }
 
     function vote(dir) {
@@ -315,13 +525,21 @@
       if (upBtn.disabled) return;
 
       votes[currentIdx] = (votes[currentIdx] || 0) + dir;
-      if (dir === -1) downCount[currentIdx] = (downCount[currentIdx] || 0) + 1;
+      if (dir === -1) {
+        downCount[currentIdx] = (downCount[currentIdx] || 0) + 1;
+        likeStreak = 0;
+        playDislikeSound();
+      } else {
+        likeStreak++;
+        playLikeSound();
+      }
 
       upBtn.disabled = true;
       downBtn.disabled = true;
       if (dir === 1) upBtn.classList.add('voted-up');
       else downBtn.classList.add('voted-down');
 
+      updateStreak();
       renderPanels();
       showTabs();
     }
@@ -349,16 +567,21 @@
         .sort(([, a], [, b]) => b - a);
 
       const el = document.getElementById('likedList');
+      const printWrap = document.getElementById('printBtnWrap');
+
       if (liked.length === 0) {
         el.innerHTML = '<p class="empty-state">Like a joke and it\'ll show up here!</p>';
+        printWrap.style.display = 'none';
         return;
       }
+
       el.innerHTML = liked.map(([idx]) =>
         `<div class="joke-item">
           <div class="q">${jokes[idx].setup}</div>
           <div class="a">${jokes[idx].punchline}</div>
         </div>`
       ).join('');
+      printWrap.style.display = 'block';
     }
 
     function renderTrophy() {
@@ -396,6 +619,9 @@
       const btn = document.getElementById('mainBtn');
       const emojiEl = document.getElementById('emoji');
       const voteRow = document.getElementById('voteRow');
+
+      // resume audio context on first interaction (browser requirement)
+      if (ctx.state === 'suspended') ctx.resume();
 
       if (state === 'idle' || state === 'punchline') {
         currentJoke = pickJoke();

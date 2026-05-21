@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kid Joke Generator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffd6e0, #c3f0ca, #a8d8f0, #ffeaa7);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 40px 36px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    h1 { font-size: 2.2rem; margin-bottom: 6px; line-height: 1.2; }
+
+    .subtitle { color: #888; font-size: 0.95rem; margin-bottom: 32px; }
+
+    .joke-box {
+      min-height: 130px;
+      background: #f9f9f9;
+      border-radius: 18px;
+      padding: 24px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .setup { font-size: 1.25rem; font-weight: 600; color: #333; line-height: 1.4; }
+
+    .punchline {
+      font-size: 1.15rem;
+      color: #e04f5f;
+      font-weight: 700;
+      line-height: 1.4;
+      animation: popIn 0.35s ease;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      70% { transform: scale(1.08); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .placeholder { font-size: 1.1rem; color: #bbb; }
+
+    .btn {
+      border: none;
+      border-radius: 50px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      padding: 14px 28px;
+    }
+
+    .btn:active { transform: scale(0.96); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff6b9d, #ff8c42);
+      color: white;
+      box-shadow: 0 4px 18px rgba(255, 107, 157, 0.4);
+      width: 100%;
+      font-size: 1.15rem;
+      padding: 16px;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 22px rgba(255, 107, 157, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .footer-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      display: block;
+      animation: wobble 2s ease-in-out infinite;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .counter { margin-top: 18px; font-size: 0.85rem; color: #bbb; }
+
+    /* Vote row */
+    .vote-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      animation: popIn 0.3s ease;
+    }
+
+    .btn-vote {
+      background: #f0f0f0;
+      border: 2px solid transparent;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 10px 18px;
+      transition: all 0.15s ease;
+      color: #555;
+    }
+
+    .btn-vote:hover { transform: scale(1.08); }
+    .btn-vote:active { transform: scale(0.95); }
+    .btn-vote.up:hover   { background: #d4f5d4; border-color: #4caf50; color: #2e7d32; }
+    .btn-vote.down:hover { background: #fdd; border-color: #e57373; color: #c62828; }
+    .btn-vote.voted-up   { background: #d4f5d4; border-color: #4caf50; color: #2e7d32; }
+    .btn-vote.voted-down { background: #fdd; border-color: #e57373; color: #c62828; }
+
+    /* Tab bar */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 28px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 0;
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #bbb;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .tab:hover { color: #888; }
+    .tab.active { color: #ff6b9d; border-bottom-color: #ff6b9d; }
+
+    .tab-panel { display: none; padding-top: 18px; }
+    .tab-panel.active { display: block; }
+
+    /* Liked jokes list */
+    .liked-list, .top-list { text-align: left; }
+
+    .joke-item {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+    }
+
+    .joke-item .q { font-weight: 600; color: #333; margin-bottom: 4px; }
+    .joke-item .a { color: #e04f5f; font-weight: 600; }
+
+    .empty-state { color: #ccc; font-size: 0.95rem; padding: 16px 0; }
+
+    /* Trophy screen */
+    .trophy-wrap { padding: 10px 0 4px; }
+    .trophy-icon { font-size: 3rem; display: block; margin-bottom: 8px; }
+    .trophy-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #aaa; margin-bottom: 6px; }
+    .trophy-setup { font-size: 1.1rem; font-weight: 700; color: #333; margin-bottom: 6px; }
+    .trophy-punchline { font-size: 1rem; color: #e04f5f; font-weight: 700; }
+    .trophy-empty { color: #ccc; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="footer-emoji" id="emoji">😄</span>
+    <h1>Kid Joke Generator</h1>
+    <p class="subtitle">Clean, silly jokes for everyone!</p>
+
+    <div class="joke-box" id="jokeBox">
+      <p class="placeholder">Press the button for a joke!</p>
+    </div>
+
+    <div id="voteRow" class="vote-row" style="display:none"></div>
+
+    <button class="btn btn-primary" id="mainBtn" onclick="nextJoke()">Tell me a joke! 🎉</button>
+
+    <p class="counter" id="counter"></p>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs" style="display:none">
+      <button class="tab active" onclick="showTab('liked')">❤️ My Faves</button>
+      <button class="tab" onclick="showTab('trophy')">🏆 Funniest</button>
+    </div>
+
+    <div id="panel-liked" class="tab-panel active">
+      <div class="liked-list" id="likedList"></div>
+    </div>
+
+    <div id="panel-trophy" class="tab-panel">
+      <div class="trophy-wrap" id="trophyWrap"></div>
+    </div>
+  </div>
+
+  <script>
+    const jokes = [
+      { setup: "Why can't Elsa have a balloon?", punchline: "Because she'll let it go!" },
+      { setup: "What do you call a sleeping dinosaur?", punchline: "A dino-snore!" },
+      { setup: "Why did the scarecrow win an award?", punchline: "Because he was outstanding in his field!" },
+      { setup: "What do you call cheese that isn't yours?", punchline: "Nacho cheese!" },
+      { setup: "Why did the bicycle fall over?", punchline: "Because it was two-tired!" },
+      { setup: "What do you call a fish without eyes?", punchline: "A fsh!" },
+      { setup: "How does a penguin build its house?", punchline: "Igloos it together!" },
+      { setup: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
+      { setup: "Why did the math book look so sad?", punchline: "Because it had too many problems!" },
+      { setup: "What do you get when you cross a snowman and a vampire?", punchline: "Frostbite!" },
+      { setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!" },
+      { setup: "What do you call a lazy kangaroo?", punchline: "A pouch potato!" },
+      { setup: "Why did the cookie go to the doctor?", punchline: "Because it was feeling crummy!" },
+      { setup: "What do elves learn in school?", punchline: "The elf-abet!" },
+      { setup: "Why did the tomato turn red?", punchline: "Because it saw the salad dressing!" },
+      { setup: "What do you call a dog magician?", punchline: "A labracadabrador!" },
+      { setup: "Why can't Cinderella play soccer?", punchline: "Because she always runs away from the ball!" },
+      { setup: "What do you call an alligator in a vest?", punchline: "An in-vest-igator!" },
+      { setup: "Why did the golfer bring an extra pair of pants?", punchline: "In case he got a hole in one!" },
+      { setup: "What do you call a pile of cats?", punchline: "A meow-ntain!" },
+      { setup: "Why did the student eat his homework?", punchline: "Because the teacher told him it was a piece of cake!" },
+      { setup: "What has four wheels and flies?", punchline: "A garbage truck!" },
+      { setup: "Why do cows wear bells?", punchline: "Because their horns don't work!" },
+      { setup: "What do you call a fake noodle?", punchline: "An impasta!" },
+      { setup: "Why did the banana go to the doctor?", punchline: "Because it wasn't peeling well!" },
+      { setup: "What do you call a dinosaur that crashes their car?", punchline: "Tyrannosaurus wrecks!" },
+      { setup: "How do you make a tissue dance?", punchline: "You put a little boogie in it!" },
+      { setup: "What do you call a boomerang that won't come back?", punchline: "A stick!" },
+      { setup: "Why did the teddy bear say no to dessert?", punchline: "Because she was already stuffed!" },
+    ];
+
+    // jokes with 2+ downvotes get skipped
+    const SKIP_THRESHOLD = 2;
+
+    let state = 'idle';
+    let currentJoke = null;
+    let currentIdx = null;
+    let usedIndices = [];
+    let jokeCount = 0;
+    const votes = {}; // idx -> net score
+    const downCount = {}; // idx -> raw downvote count
+
+    const emojis = ['😄','🤣','😂','🐸','🦄','🐧','🌈','🎉','🐢','🦊','🎈','🐙'];
+
+    const upLabels = [
+      "🤣 That's a knee slapper!",
+      "😂 Ha! Got me!",
+      "😄 Hehe, good one!",
+      "😆 Spit my milk!",
+    ];
+
+    const downLabels = [
+      "😑 Womp-womp",
+      "🥁 ...crickets",
+      "🤕 My brain hurts",
+      "👎 Booooo!",
+    ];
+
+    function randomEmoji() {
+      return emojis[Math.floor(Math.random() * emojis.length)];
+    }
+
+    function isBanned(idx) {
+      return (downCount[idx] || 0) >= SKIP_THRESHOLD;
+    }
+
+    function pickJoke() {
+      const eligible = jokes.map((_, i) => i).filter(i => !isBanned(i));
+      if (eligible.length === 0) return Math.floor(Math.random() * jokes.length); // fallback
+
+      // reset used list if all eligible jokes have been seen
+      const unseenEligible = eligible.filter(i => !usedIndices.includes(i));
+      if (unseenEligible.length === 0) usedIndices = [];
+
+      const pool = eligible.filter(i => !usedIndices.includes(i));
+      const idx = pool[Math.floor(Math.random() * pool.length)];
+      usedIndices.push(idx);
+      currentIdx = idx;
+      return jokes[idx];
+    }
+
+    function vote(dir) {
+      const upBtn = document.getElementById('voteUp');
+      const downBtn = document.getElementById('voteDown');
+      if (upBtn.disabled) return;
+
+      votes[currentIdx] = (votes[currentIdx] || 0) + dir;
+      if (dir === -1) downCount[currentIdx] = (downCount[currentIdx] || 0) + 1;
+
+      upBtn.disabled = true;
+      downBtn.disabled = true;
+      if (dir === 1) upBtn.classList.add('voted-up');
+      else downBtn.classList.add('voted-down');
+
+      renderPanels();
+      showTabs();
+    }
+
+    function showTab(name) {
+      document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', ['liked','trophy'][i] === name);
+      });
+      document.getElementById('panel-liked').classList.toggle('active', name === 'liked');
+      document.getElementById('panel-trophy').classList.toggle('active', name === 'trophy');
+    }
+
+    function showTabs() {
+      document.getElementById('tabs').style.display = 'flex';
+    }
+
+    function renderPanels() {
+      renderLiked();
+      renderTrophy();
+    }
+
+    function renderLiked() {
+      const liked = Object.entries(votes)
+        .filter(([, v]) => v > 0)
+        .sort(([, a], [, b]) => b - a);
+
+      const el = document.getElementById('likedList');
+      if (liked.length === 0) {
+        el.innerHTML = '<p class="empty-state">Like a joke and it\'ll show up here!</p>';
+        return;
+      }
+      el.innerHTML = liked.map(([idx]) =>
+        `<div class="joke-item">
+          <div class="q">${jokes[idx].setup}</div>
+          <div class="a">${jokes[idx].punchline}</div>
+        </div>`
+      ).join('');
+    }
+
+    function renderTrophy() {
+      const el = document.getElementById('trophyWrap');
+      const liked = Object.entries(votes).filter(([, v]) => v > 0);
+      if (liked.length === 0) {
+        el.innerHTML = '<p class="trophy-empty">Rate some jokes to crown a winner!</p>';
+        return;
+      }
+      const [bestIdx] = liked.sort(([, a], [, b]) => b - a)[0];
+      el.innerHTML = `
+        <span class="trophy-icon">🏆</span>
+        <div class="trophy-label">Funniest Joke</div>
+        <div class="trophy-setup">${jokes[bestIdx].setup}</div>
+        <div class="trophy-punchline">${jokes[bestIdx].punchline}</div>
+      `;
+    }
+
+    function showVoteRow() {
+      const voteRow = document.getElementById('voteRow');
+      const already = votes[currentIdx] !== undefined;
+      const upLabel = upLabels[Math.floor(Math.random() * upLabels.length)];
+      const downLabel = downLabels[Math.floor(Math.random() * downLabels.length)];
+      voteRow.style.display = 'flex';
+      voteRow.innerHTML = `
+        <button id="voteUp" class="btn btn-vote up ${already && votes[currentIdx] > 0 ? 'voted-up' : ''}"
+          onclick="vote(1)" ${already ? 'disabled' : ''}>${upLabel}</button>
+        <button id="voteDown" class="btn btn-vote down ${already && votes[currentIdx] < 0 ? 'voted-down' : ''}"
+          onclick="vote(-1)" ${already ? 'disabled' : ''}>${downLabel}</button>
+      `;
+    }
+
+    function nextJoke() {
+      const box = document.getElementById('jokeBox');
+      const btn = document.getElementById('mainBtn');
+      const emojiEl = document.getElementById('emoji');
+      const voteRow = document.getElementById('voteRow');
+
+      if (state === 'idle' || state === 'punchline') {
+        currentJoke = pickJoke();
+        box.innerHTML = `<p class="setup">${currentJoke.setup}</p>`;
+        btn.textContent = "🤔 What's the answer?";
+        emojiEl.textContent = '🤔';
+        voteRow.style.display = 'none';
+        state = 'setup';
+      } else if (state === 'setup') {
+        jokeCount++;
+        box.innerHTML = `
+          <p class="setup">${currentJoke.setup}</p>
+          <p class="punchline">${currentJoke.punchline} 😄</p>
+        `;
+        btn.textContent = 'Another joke! 🎉';
+        emojiEl.textContent = randomEmoji();
+        document.getElementById('counter').textContent =
+          jokeCount === 1 ? '1 joke told!' : `${jokeCount} jokes told!`;
+        showVoteRow();
+        state = 'punchline';
+      }
+    }
+  </script>
+</body>
+</html>

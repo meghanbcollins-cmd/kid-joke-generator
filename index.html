@@ -18,6 +18,19 @@
       animation: gradientShift 8s ease infinite;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
+      transition: background 0.5s ease;
+    }
+
+    body.mode-pirate {
+      background: linear-gradient(135deg, #0a1628, #1a3a5c, #0d2b45, #1b2a1b);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    body.mode-dad {
+      background: linear-gradient(135deg, #f5e6d3, #e8c99a, #d4a96a, #f0dcc0);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
     }
 
     @keyframes gradientShift {
@@ -36,6 +49,48 @@
       text-align: center;
     }
 
+    /* Mode switcher */
+    .mode-switcher {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .mode-btn {
+      background: #f0f0f0;
+      border: 2px solid transparent;
+      border-radius: 50px;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #666;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn:hover { background: #e4e4e4; color: #444; }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, #ff6b9d, #ff8c42);
+      color: white;
+      box-shadow: 0 4px 14px rgba(255,107,157,0.35);
+      border-color: transparent;
+    }
+
+    /* Pirate mode: gold active button */
+    body.mode-pirate .mode-btn.active {
+      background: linear-gradient(135deg, #d4a017, #c8860a);
+      box-shadow: 0 4px 14px rgba(212,160,23,0.4);
+    }
+
+    /* Dad mode: warm brown active button */
+    body.mode-dad .mode-btn.active {
+      background: linear-gradient(135deg, #8b5e3c, #a0714f);
+      box-shadow: 0 4px 14px rgba(139,94,60,0.4);
+    }
+
     h1 { font-size: 2.2rem; margin-bottom: 6px; line-height: 1.2; }
     .subtitle { color: #888; font-size: 0.95rem; margin-bottom: 16px; }
 
@@ -50,6 +105,9 @@
 
     .streak.hot { color: #ff6b9d; animation: popIn 0.4s ease; }
     .streak.cold { color: #bbb; }
+
+    body.mode-pirate .streak.hot { color: #d4a017; }
+    body.mode-dad    .streak.hot { color: #7a4a25; }
 
     .joke-box {
       min-height: 130px;
@@ -74,6 +132,9 @@
       line-height: 1.4;
       animation: popIn 0.35s ease;
     }
+
+    body.mode-pirate .punchline { color: #d4a017; }
+    body.mode-dad    .punchline { color: #7a4a25; }
 
     @keyframes popIn {
       0% { transform: scale(0.7); opacity: 0; }
@@ -108,6 +169,18 @@
       box-shadow: 0 6px 22px rgba(255, 107, 157, 0.55);
       transform: translateY(-1px);
     }
+
+    body.mode-pirate .btn-primary {
+      background: linear-gradient(135deg, #d4a017, #c8860a);
+      box-shadow: 0 4px 18px rgba(212,160,23,0.4);
+    }
+    body.mode-pirate .btn-primary:hover { box-shadow: 0 6px 22px rgba(212,160,23,0.55); }
+
+    body.mode-dad .btn-primary {
+      background: linear-gradient(135deg, #8b5e3c, #a0714f);
+      box-shadow: 0 4px 18px rgba(139,94,60,0.4);
+    }
+    body.mode-dad .btn-primary:hover { box-shadow: 0 6px 22px rgba(139,94,60,0.55); }
 
     .footer-emoji {
       font-size: 2.5rem;
@@ -177,6 +250,9 @@
     .tab:hover { color: #888; }
     .tab.active { color: #ff6b9d; border-bottom-color: #ff6b9d; }
 
+    body.mode-pirate .tab.active { color: #d4a017; border-bottom-color: #d4a017; }
+    body.mode-dad    .tab.active { color: #7a4a25; border-bottom-color: #7a4a25; }
+
     .tab-panel { display: none; padding-top: 18px; }
     .tab-panel.active { display: block; }
 
@@ -193,6 +269,9 @@
     .joke-item .q { font-weight: 600; color: #333; margin-bottom: 4px; }
     .joke-item .a { color: #e04f5f; font-weight: 600; }
 
+    body.mode-pirate .joke-item .a { color: #d4a017; }
+    body.mode-dad    .joke-item .a { color: #7a4a25; }
+
     .empty-state { color: #ccc; font-size: 0.95rem; padding: 16px 0; }
 
     /* Trophy */
@@ -202,6 +281,9 @@
     .trophy-setup { font-size: 1.1rem; font-weight: 700; color: #333; margin-bottom: 6px; }
     .trophy-punchline { font-size: 1rem; color: #e04f5f; font-weight: 700; }
     .trophy-empty { color: #ccc; font-size: 0.95rem; }
+
+    body.mode-pirate .trophy-punchline { color: #d4a017; }
+    body.mode-dad    .trophy-punchline { color: #7a4a25; }
 
     /* Print button */
     .btn-print {
@@ -223,7 +305,7 @@
       body { background: white; padding: 0; }
       .card { box-shadow: none; max-width: 100%; padding: 20px; }
       .joke-box, .vote-row, .tabs, #mainBtn, .counter, .streak, .footer-emoji,
-      #panel-trophy, .btn-print, #tabs { display: none !important; }
+      #panel-trophy, .btn-print, #tabs, .mode-switcher { display: none !important; }
       #panel-liked { display: block !important; }
       .joke-item { break-inside: avoid; border: 1px solid #eee; }
       h1 { font-size: 1.6rem; }
@@ -240,21 +322,29 @@
     }
   </style>
 </head>
-<body>
+<body class="mode-surprise">
   <div class="card">
+
+    <!-- Mode switcher -->
+    <div class="mode-switcher">
+      <button class="mode-btn active" id="btn-mode-surprise" onclick="switchMode('surprise')">🎲 Surprise Me</button>
+      <button class="mode-btn" id="btn-mode-pirate" onclick="switchMode('pirate')">🏴‍☠️ Pirate Mode</button>
+      <button class="mode-btn" id="btn-mode-dad" onclick="switchMode('dad')">👨 Dad Mode</button>
+    </div>
+
     <span class="footer-emoji" id="emoji">😄</span>
-    <h1>Kid Joke Generator</h1>
+    <h1 id="title">Kid Joke Generator</h1>
     <p class="subtitle">Clean, silly jokes for everyone!</p>
 
     <div class="streak cold" id="streak"></div>
 
     <div class="joke-box" id="jokeBox">
-      <p class="placeholder">Press the button for a joke!</p>
+      <p class="placeholder">Loading your first joke...</p>
     </div>
 
     <div id="voteRow" class="vote-row" style="display:none"></div>
 
-    <button class="btn btn-primary" id="mainBtn" onclick="nextJoke()">Tell me a joke! 🎉</button>
+    <button class="btn btn-primary" id="mainBtn" onclick="revealPunchline()">🤔 What's the answer?</button>
 
     <p class="counter" id="counter"></p>
 
@@ -278,116 +368,170 @@
   </div>
 
   <script>
+    // ── Joke pools ──────────────────────────────────────────────────────────────
+
     const jokes = [
-      { setup: "Why can't Elsa have a balloon?", punchline: "Because she'll let it go!" },
-      { setup: "What do you call a sleeping dinosaur?", punchline: "A dino-snore!" },
-      { setup: "Why did the scarecrow win an award?", punchline: "Because he was outstanding in his field!" },
-      { setup: "What do you call cheese that isn't yours?", punchline: "Nacho cheese!" },
-      { setup: "Why did the bicycle fall over?", punchline: "Because it was two-tired!" },
-      { setup: "What do you call a fish without eyes?", punchline: "A fsh!" },
-      { setup: "How does a penguin build its house?", punchline: "Igloos it together!" },
-      { setup: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
-      { setup: "Why did the math book look so sad?", punchline: "Because it had too many problems!" },
-      { setup: "What do you get when you cross a snowman and a vampire?", punchline: "Frostbite!" },
-      { setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!" },
-      { setup: "What do you call a lazy kangaroo?", punchline: "A pouch potato!" },
-      { setup: "Why did the cookie go to the doctor?", punchline: "Because it was feeling crummy!" },
-      { setup: "What do elves learn in school?", punchline: "The elf-abet!" },
-      { setup: "Why did the tomato turn red?", punchline: "Because it saw the salad dressing!" },
-      { setup: "What do you call a dog magician?", punchline: "A labracadabrador!" },
-      { setup: "Why can't Cinderella play soccer?", punchline: "Because she always runs away from the ball!" },
-      { setup: "What do you call an alligator in a vest?", punchline: "An in-vest-igator!" },
-      { setup: "Why did the golfer bring an extra pair of pants?", punchline: "In case he got a hole in one!" },
-      { setup: "What do you call a pile of cats?", punchline: "A meow-ntain!" },
-      { setup: "Why did the student eat his homework?", punchline: "Because the teacher told him it was a piece of cake!" },
-      { setup: "What has four wheels and flies?", punchline: "A garbage truck!" },
-      { setup: "Why do cows wear bells?", punchline: "Because their horns don't work!" },
-      { setup: "What do you call a fake noodle?", punchline: "An impasta!" },
-      { setup: "Why did the banana go to the doctor?", punchline: "Because it wasn't peeling well!" },
-      { setup: "What do you call a dinosaur that crashes their car?", punchline: "Tyrannosaurus wrecks!" },
-      { setup: "How do you make a tissue dance?", punchline: "You put a little boogie in it!" },
-      { setup: "What do you call a boomerang that won't come back?", punchline: "A stick!" },
-      { setup: "Why did the teddy bear say no to dessert?", punchline: "Because she was already stuffed!" },
-      { setup: "What do you call a cow with no legs?", punchline: "Ground beef!" },
-      { setup: "Why did the orange stop rolling down the hill?", punchline: "Because it ran out of juice!" },
-      { setup: "What do you call a snowman with a six-pack?", punchline: "An abdominal snowman!" },
-      { setup: "Why did the robot go on a diet?", punchline: "Because it had too many bytes!" },
-      { setup: "What do you call a pig that does karate?", punchline: "A pork chop!" },
-      { setup: "Why did the music teacher need a ladder?", punchline: "To reach the high notes!" },
-      { setup: "What do you call a duck that gets all A's?", punchline: "A wise quacker!" },
-      { setup: "Why can't a nose be 12 inches long?", punchline: "Because then it would be a foot!" },
-      { setup: "What do you call two bananas?", punchline: "A pair of slippers!" },
-      { setup: "What do you call a sad strawberry?", punchline: "A blueberry!" },
-      { setup: "Why did the clock go to the principal's office?", punchline: "Because it tocked too much!" },
-      { setup: "Why did the frog take the bus?", punchline: "Because his car got toad!" },
-      { setup: "Why did the tree go to the dentist?", punchline: "To get a root canal!" },
-      { setup: "What do you call a funny mountain?", punchline: "Hill-arious!" },
-      { setup: "Why did the elephant bring a suitcase to the jungle?", punchline: "Because it had a big trunk!" },
-      { setup: "What do you call a cold dog?", punchline: "A chili dog!" },
-      { setup: "Why did the astronaut break up with the moon?", punchline: "Because she needed some space!" },
-      { setup: "What do you call a superhero who works at a bakery?", punchline: "Bun-man!" },
-      { setup: "Why did the broom get promoted?", punchline: "Because it swept the competition!" },
-      { setup: "What do you call a fish with no tail?", punchline: "A lost cause!" },
-      { setup: "Why did the teddy bear skip lunch?", punchline: "Because she was already stuffed!" },
+      { id: 's0',  setup: "Why can't Elsa have a balloon?", punchline: "Because she'll let it go!" },
+      { id: 's1',  setup: "What do you call a sleeping dinosaur?", punchline: "A dino-snore!" },
+      { id: 's2',  setup: "Why did the scarecrow win an award?", punchline: "Because he was outstanding in his field!" },
+      { id: 's3',  setup: "What do you call cheese that isn't yours?", punchline: "Nacho cheese!" },
+      { id: 's4',  setup: "Why did the bicycle fall over?", punchline: "Because it was two-tired!" },
+      { id: 's5',  setup: "What do you call a fish without eyes?", punchline: "A fsh!" },
+      { id: 's6',  setup: "How does a penguin build its house?", punchline: "Igloos it together!" },
+      { id: 's7',  setup: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
+      { id: 's8',  setup: "Why did the math book look so sad?", punchline: "Because it had too many problems!" },
+      { id: 's9',  setup: "What do you get when you cross a snowman and a vampire?", punchline: "Frostbite!" },
+      { id: 's10', setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!" },
+      { id: 's11', setup: "What do you call a lazy kangaroo?", punchline: "A pouch potato!" },
+      { id: 's12', setup: "Why did the cookie go to the doctor?", punchline: "Because it was feeling crummy!" },
+      { id: 's13', setup: "What do elves learn in school?", punchline: "The elf-abet!" },
+      { id: 's14', setup: "Why did the tomato turn red?", punchline: "Because it saw the salad dressing!" },
+      { id: 's15', setup: "What do you call a dog magician?", punchline: "A labracadabrador!" },
+      { id: 's16', setup: "Why can't Cinderella play soccer?", punchline: "Because she always runs away from the ball!" },
+      { id: 's17', setup: "What do you call an alligator in a vest?", punchline: "An in-vest-igator!" },
+      { id: 's18', setup: "Why did the golfer bring an extra pair of pants?", punchline: "In case he got a hole in one!" },
+      { id: 's19', setup: "What do you call a pile of cats?", punchline: "A meow-ntain!" },
+      { id: 's20', setup: "Why did the student eat his homework?", punchline: "Because the teacher told him it was a piece of cake!" },
+      { id: 's21', setup: "What has four wheels and flies?", punchline: "A garbage truck!" },
+      { id: 's22', setup: "Why do cows wear bells?", punchline: "Because their horns don't work!" },
+      { id: 's23', setup: "What do you call a fake noodle?", punchline: "An impasta!" },
+      { id: 's24', setup: "Why did the banana go to the doctor?", punchline: "Because it wasn't peeling well!" },
+      { id: 's25', setup: "What do you call a dinosaur that crashes their car?", punchline: "Tyrannosaurus wrecks!" },
+      { id: 's26', setup: "How do you make a tissue dance?", punchline: "You put a little boogie in it!" },
+      { id: 's27', setup: "What do you call a boomerang that won't come back?", punchline: "A stick!" },
+      { id: 's28', setup: "Why did the teddy bear say no to dessert?", punchline: "Because she was already stuffed!" },
+      { id: 's29', setup: "What do you call a cow with no legs?", punchline: "Ground beef!" },
+      { id: 's30', setup: "Why did the orange stop rolling down the hill?", punchline: "Because it ran out of juice!" },
+      { id: 's31', setup: "What do you call a snowman with a six-pack?", punchline: "An abdominal snowman!" },
+      { id: 's32', setup: "Why did the robot go on a diet?", punchline: "Because it had too many bytes!" },
+      { id: 's33', setup: "What do you call a pig that does karate?", punchline: "A pork chop!" },
+      { id: 's34', setup: "Why did the music teacher need a ladder?", punchline: "To reach the high notes!" },
+      { id: 's35', setup: "What do you call a duck that gets all A's?", punchline: "A wise quacker!" },
+      { id: 's36', setup: "Why can't a nose be 12 inches long?", punchline: "Because then it would be a foot!" },
+      { id: 's37', setup: "What do you call two bananas?", punchline: "A pair of slippers!" },
+      { id: 's38', setup: "What do you call a sad strawberry?", punchline: "A blueberry!" },
+      { id: 's39', setup: "Why did the clock go to the principal's office?", punchline: "Because it tocked too much!" },
+      { id: 's40', setup: "Why did the frog take the bus?", punchline: "Because his car got toad!" },
+      { id: 's41', setup: "Why did the tree go to the dentist?", punchline: "To get a root canal!" },
+      { id: 's42', setup: "What do you call a funny mountain?", punchline: "Hill-arious!" },
+      { id: 's43', setup: "Why did the elephant bring a suitcase to the jungle?", punchline: "Because it had a big trunk!" },
+      { id: 's44', setup: "What do you call a cold dog?", punchline: "A chili dog!" },
+      { id: 's45', setup: "Why did the astronaut break up with the moon?", punchline: "Because she needed some space!" },
+      { id: 's46', setup: "What do you call a superhero who works at a bakery?", punchline: "Bun-man!" },
+      { id: 's47', setup: "Why did the broom get promoted?", punchline: "Because it swept the competition!" },
+      { id: 's48', setup: "What do you call a fish with no tail?", punchline: "A lost cause!" },
+      { id: 's49', setup: "Why did the teddy bear skip lunch?", punchline: "Because she was already stuffed!" },
     ];
+
+    const pirateJokes = [
+      { id: 'p0',  setup: "Why don't pirates shower before they walk the plank?", punchline: "Because they'll just wash up on shore!" },
+      { id: 'p1',  setup: "What's a pirate's favorite letter?", punchline: "You'd think it's R, but it's really the C!" },
+      { id: 'p2',  setup: "What do you call a pirate who skips class?", punchline: "Captain Hooky!" },
+      { id: 'p3',  setup: "What's a pirate's favorite subject in school?", punchline: "Arrr-t!" },
+      { id: 'p4',  setup: "How do pirates prefer to communicate?", punchline: "Aye to aye!" },
+      { id: 'p5',  setup: "Why can't pirates play cards?", punchline: "Because they're always standing on the deck!" },
+      { id: 'p6',  setup: "Why did the pirate buy an eye patch?", punchline: "Because iPads were too expensive!" },
+      { id: 'p7',  setup: "What do pirates eat for breakfast?", punchline: "Captain Crunch!" },
+      { id: 'p8',  setup: "What's a pirate's favorite movie?", punchline: "Booty and the Beast!" },
+      { id: 'p9',  setup: "Why do pirates like talking parrots?", punchline: "Because they squawk the plank!" },
+      { id: 'p10', setup: "How much does a pirate pay to get its ears pierced?", punchline: "About a bucc-an-eer!" },
+      { id: 'p11', setup: "What's the pirate movie rated?", punchline: "Arrr!" },
+      { id: 'p12', setup: "What do you call a pirate who works at Starbucks?", punchline: "A bARRRista!" },
+      { id: 'p13', setup: "What did the ocean say to the pirate?", punchline: "Nothing, it just waved." },
+    ];
+
+    const dadJokes = [
+      { id: 'd0',  setup: "I'm reading a book about anti-gravity.", punchline: "It's impossible to put down!" },
+      { id: 'd1',  setup: "Why do fathers take an extra pair of socks when they golf?", punchline: "In case they get a hole in one!" },
+      { id: 'd2',  setup: "I used to hate facial hair.", punchline: "But then it grew on me." },
+      { id: 'd3',  setup: "What do you call a fish without eyes?", punchline: "A fsh!" },
+      { id: 'd4',  setup: "Why did the invisible man turn down the job offer?", punchline: "He couldn't see himself doing it." },
+      { id: 'd5',  setup: "What do you call someone with no body and no nose?", punchline: "Nobody knows!" },
+      { id: 'd6',  setup: "Why can't you trust an atom?", punchline: "Because they make up everything!" },
+      { id: 'd7',  setup: "I only know 25 letters of the alphabet.", punchline: "I don't know y." },
+      { id: 'd8',  setup: "What do you call a factory that makes okay products?", punchline: "A satisfactory!" },
+      { id: 'd9',  setup: "Did you hear about the claustrophobic astronaut?", punchline: "He just needed a little space." },
+      { id: 'd10', setup: "I asked my dog what two minus two is.", punchline: "He said nothing." },
+      { id: 'd11', setup: "What do you call a sleeping dinosaur?", punchline: "A dino-snore!" },
+      { id: 'd12', setup: "Why don't scientists trust atoms?", punchline: "They make up everything!" },
+      { id: 'd13', setup: "I would tell you a joke about paper,", punchline: "but it's tearable." },
+      { id: 'd14', setup: "What did the ocean say to the beach?", punchline: "Nothing, it just waved." },
+      { id: 'd15', setup: "Why do cows wear bells?", punchline: "Because their horns don't work!" },
+      { id: 'd16', setup: "I'm on a seafood diet.", punchline: "Every time I see food, I eat it." },
+    ];
+
+    // Flat lookup map for all jokes by id
+    const allJokes = {};
+    [...jokes, ...pirateJokes, ...dadJokes].forEach(j => { allJokes[j.id] = j; });
+
+    // ── Mode config ─────────────────────────────────────────────────────────────
+
+    const modeConfig = {
+      surprise: {
+        title: 'Kid Joke Generator',
+        emoji: '😄',
+        pool: () => jokes,
+      },
+      pirate: {
+        title: 'Pirate Joke Generator ☠️',
+        emoji: '🏴‍☠️',
+        pool: () => pirateJokes,
+      },
+      dad: {
+        title: 'Dad Joke Generator 👨',
+        emoji: '😎',
+        pool: () => dadJokes,
+      },
+    };
+
+    // ── Vote labels per mode ─────────────────────────────────────────────────────
+
+    const upLabels = {
+      surprise: ["🤣 That's a knee slapper!", "😂 Ha! Got me!", "😄 Hehe, good one!", "😆 Spit my milk!"],
+      pirate:   ["⚓ Shiver me timbers!", "🦜 Arr, that's gold!", "🏴‍☠️ Blimey, good one!", "🌊 Sail on, matey!"],
+      dad:      ["😂 That's a good one, kiddo!", "👏 Dad approved!", "🙌 Gold star, Dad!", "🤣 That's my best one!"],
+    };
+
+    const downLabels = {
+      surprise: ["😑 Womp-womp", "🥁 ...crickets", "🤕 My brain hurts", "👎 Booooo!"],
+      pirate:   ["🦈 Walk the plank!", "💀 Davy Jones' locker!", "🌊 Man overboard!", "⚓ Abandon ship!"],
+      dad:      ["🙄 That was bad, Dad", "😬 Oof, even for a dad joke...", "🤦 Dad, no.", "👎 Back to the drawing board"],
+    };
+
+    // ── State ────────────────────────────────────────────────────────────────────
 
     const SKIP_THRESHOLD = 2;
 
-    let state = 'idle';
+    let currentMode = 'surprise';
+    let state = 'setup'; // 'setup' | 'punchline'
     let currentJoke = null;
-    let currentIdx = null;
     let deck = [];
     let jokeCount = 0;
     let likeStreak = 0;
     const votes = {};
     const downCount = {};
 
-    const emojis = ['😄','🤣','😂','🐸','🦄','🐧','🌈','🎉','🐢','🦊','🎈','🐙'];
+    const emojiList = ['😄','🤣','😂','🐸','🦄','🐧','🌈','🎉','🐢','🦊','🎈','🐙'];
 
-    const upLabels = [
-      "🤣 That's a knee slapper!",
-      "😂 Ha! Got me!",
-      "😄 Hehe, good one!",
-      "😆 Spit my milk!",
-    ];
+    // ── Audio ────────────────────────────────────────────────────────────────────
 
-    const downLabels = [
-      "😑 Womp-womp",
-      "🥁 ...crickets",
-      "🤕 My brain hurts",
-      "👎 Booooo!",
-    ];
-
-    const streakMessages = [
-      '', '', // 0, 1 — no message
-      '🔥 2 in a row!',
-      '🔥🔥 3 knee-slappers in a row!',
-      '🔥🔥🔥 4 in a row — you\'re on fire!',
-      '🚀 5 in a row!! Comedy legend!!',
-    ];
-
-    // --- Sound effects via Web Audio API ---
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
     function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
     const likeSounds = [
-      // Classic rimshot: ba-dum-tss
       function() {
         const t = ctx.currentTime;
-        // noise hi-hat
         const buf = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
         const data = buf.getChannelData(0);
         for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
         const src = ctx.createBufferSource(); src.buffer = buf;
         const hpf = ctx.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = 8000;
         src.connect(hpf);
-        // snare
         const snare = ctx.createOscillator(); const snareGain = ctx.createGain();
         snare.frequency.value = 180;
         snareGain.gain.setValueAtTime(0.4, t + 0.12); snareGain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
         snare.connect(snareGain);
-        // kick
         const kick = ctx.createOscillator(); const kickGain = ctx.createGain();
         kick.frequency.setValueAtTime(150, t); kick.frequency.exponentialRampToValueAtTime(40, t + 0.1);
         kickGain.gain.setValueAtTime(1, t); kickGain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
@@ -398,7 +542,6 @@
         snare.start(t + 0.12); snare.stop(t + 0.28);
         kick.start(t); kick.stop(t + 0.2);
       },
-      // Ascending "ta-da!" fanfare
       function() {
         const t = ctx.currentTime;
         [[523, 0], [659, 0.12], [784, 0.24], [1047, 0.36]].forEach(([freq, delay]) => {
@@ -409,7 +552,6 @@
           osc.start(t + delay); osc.stop(t + delay + 0.25);
         });
       },
-      // Bouncy boing
       function() {
         const t = ctx.currentTime;
         const osc = ctx.createOscillator(); const gain = ctx.createGain();
@@ -420,7 +562,6 @@
         osc.connect(gain); gain.connect(ctx.destination);
         osc.start(t); osc.stop(t + 0.4);
       },
-      // Three cheerful pings
       function() {
         const t = ctx.currentTime;
         [880, 1100, 1320].forEach((freq, i) => {
@@ -434,7 +575,6 @@
     ];
 
     const dislikeSounds = [
-      // Classic womp-womp trombone
       function() {
         const t = ctx.currentTime;
         [0, 0.35, 0.65].forEach((delay, i) => {
@@ -447,7 +587,6 @@
           osc.start(t + delay); osc.stop(t + delay + 0.3);
         });
       },
-      // Sad descending scale
       function() {
         const t = ctx.currentTime;
         [523, 440, 349, 262].forEach((freq, i) => {
@@ -458,7 +597,6 @@
           osc.start(t + i * 0.15); osc.stop(t + i * 0.15 + 0.2);
         });
       },
-      // Buzzer
       function() {
         const t = ctx.currentTime;
         const osc = ctx.createOscillator(); const gain = ctx.createGain();
@@ -467,7 +605,6 @@
         osc.connect(gain); gain.connect(ctx.destination);
         osc.start(t); osc.stop(t + 0.6);
       },
-      // Deflating balloon
       function() {
         const t = ctx.currentTime;
         const osc = ctx.createOscillator(); const gain = ctx.createGain();
@@ -482,16 +619,15 @@
     function playLikeSound()    { pick(likeSounds)(); }
     function playDislikeSound() { pick(dislikeSounds)(); }
 
-    function randomEmoji() {
-      return emojis[Math.floor(Math.random() * emojis.length)];
-    }
+    // ── Deck logic ───────────────────────────────────────────────────────────────
 
-    function isBanned(idx) {
-      return (downCount[idx] || 0) >= SKIP_THRESHOLD;
+    function isBanned(joke) {
+      return (downCount[joke.id] || 0) >= SKIP_THRESHOLD;
     }
 
     function buildDeck() {
-      const eligible = jokes.map((_, i) => i).filter(i => !isBanned(i));
+      const pool = modeConfig[currentMode].pool();
+      const eligible = pool.map((_, i) => i).filter(i => !isBanned(pool[i]));
       for (let i = eligible.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [eligible[i], eligible[j]] = [eligible[j], eligible[i]];
@@ -500,33 +636,58 @@
     }
 
     function pickJoke() {
+      const pool = modeConfig[currentMode].pool();
       if (deck.length === 0) deck = buildDeck();
-      if (deck.length === 0) deck = jokes.map((_, i) => i);
+      if (deck.length === 0) deck = pool.map((_, i) => i);
       const idx = deck.shift();
-      currentIdx = idx;
-      return jokes[idx];
+      return pool[idx];
     }
 
-    function updateStreak() {
-      const el = document.getElementById('streak');
-      if (likeStreak < 2) {
-        el.textContent = '';
-        el.className = 'streak cold';
-      } else {
-        const msg = streakMessages[Math.min(likeStreak, streakMessages.length - 1)];
-        el.textContent = msg;
-        el.className = 'streak hot';
-      }
+    // ── Core flow ────────────────────────────────────────────────────────────────
+
+    function startNewJoke() {
+      if (ctx.state === 'suspended') ctx.resume();
+      currentJoke = pickJoke();
+      const box = document.getElementById('jokeBox');
+      const btn = document.getElementById('mainBtn');
+      const voteRow = document.getElementById('voteRow');
+      box.innerHTML = `<p class="setup">${currentJoke.setup}</p>`;
+      btn.textContent = '🤔 What\'s the answer?';
+      btn.style.display = 'block';
+      voteRow.style.display = 'none';
+      state = 'setup';
     }
+
+    function revealPunchline() {
+      if (state !== 'setup') return;
+      if (ctx.state === 'suspended') ctx.resume();
+      jokeCount++;
+      const box = document.getElementById('jokeBox');
+      const btn = document.getElementById('mainBtn');
+      const emojiEl = document.getElementById('emoji');
+      box.innerHTML = `
+        <p class="setup">${currentJoke.setup}</p>
+        <p class="punchline">${currentJoke.punchline} 😄</p>
+      `;
+      btn.style.display = 'none';
+      emojiEl.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+      document.getElementById('counter').textContent =
+        jokeCount === 1 ? '1 joke told!' : `${jokeCount} jokes told!`;
+      showVoteRow();
+      state = 'punchline';
+    }
+
+    // ── Voting ───────────────────────────────────────────────────────────────────
 
     function vote(dir) {
       const upBtn = document.getElementById('voteUp');
       const downBtn = document.getElementById('voteDown');
       if (upBtn.disabled) return;
 
-      votes[currentIdx] = (votes[currentIdx] || 0) + dir;
+      votes[currentJoke.id] = (votes[currentJoke.id] || 0) + dir;
+
       if (dir === -1) {
-        downCount[currentIdx] = (downCount[currentIdx] || 0) + 1;
+        downCount[currentJoke.id] = (downCount[currentJoke.id] || 0) + 1;
         likeStreak = 0;
         playDislikeSound();
       } else {
@@ -542,7 +703,48 @@
       updateStreak();
       renderPanels();
       showTabs();
+
+      setTimeout(startNewJoke, 1100);
     }
+
+    // ── Streak ───────────────────────────────────────────────────────────────────
+
+    const streakMessages = [
+      '', '',
+      '🔥 2 in a row!',
+      '🔥🔥 3 knee-slappers in a row!',
+      '🔥🔥🔥 4 in a row — you\'re on fire!',
+      '🚀 5 in a row!! Comedy legend!!',
+    ];
+
+    function updateStreak() {
+      const el = document.getElementById('streak');
+      if (likeStreak < 2) {
+        el.textContent = '';
+        el.className = 'streak cold';
+      } else {
+        el.textContent = streakMessages[Math.min(likeStreak, streakMessages.length - 1)];
+        el.className = 'streak hot';
+      }
+    }
+
+    // ── Vote row ─────────────────────────────────────────────────────────────────
+
+    function showVoteRow() {
+      const voteRow = document.getElementById('voteRow');
+      const already = votes[currentJoke.id] !== undefined;
+      const upLabel   = pick(upLabels[currentMode]);
+      const downLabel = pick(downLabels[currentMode]);
+      voteRow.style.display = 'flex';
+      voteRow.innerHTML = `
+        <button id="voteUp" class="btn btn-vote up ${already && votes[currentJoke.id] > 0 ? 'voted-up' : ''}"
+          onclick="vote(1)" ${already ? 'disabled' : ''}>${upLabel}</button>
+        <button id="voteDown" class="btn btn-vote down ${already && votes[currentJoke.id] < 0 ? 'voted-down' : ''}"
+          onclick="vote(-1)" ${already ? 'disabled' : ''}>${downLabel}</button>
+      `;
+    }
+
+    // ── Tabs & panels ────────────────────────────────────────────────────────────
 
     function showTab(name) {
       document.querySelectorAll('.tab').forEach((t, i) => {
@@ -575,12 +777,14 @@
         return;
       }
 
-      el.innerHTML = liked.map(([idx]) =>
-        `<div class="joke-item">
-          <div class="q">${jokes[idx].setup}</div>
-          <div class="a">${jokes[idx].punchline}</div>
-        </div>`
-      ).join('');
+      el.innerHTML = liked.map(([id]) => {
+        const joke = allJokes[id];
+        if (!joke) return '';
+        return `<div class="joke-item">
+          <div class="q">${joke.setup}</div>
+          <div class="a">${joke.punchline}</div>
+        </div>`;
+      }).join('');
       printWrap.style.display = 'block';
     }
 
@@ -591,59 +795,43 @@
         el.innerHTML = '<p class="trophy-empty">Rate some jokes to crown a winner!</p>';
         return;
       }
-      const [bestIdx] = liked.sort(([, a], [, b]) => b - a)[0];
+      const [bestId] = liked.sort(([, a], [, b]) => b - a)[0];
+      const best = allJokes[bestId];
+      if (!best) return;
       el.innerHTML = `
         <span class="trophy-icon">🏆</span>
         <div class="trophy-label">Funniest Joke</div>
-        <div class="trophy-setup">${jokes[bestIdx].setup}</div>
-        <div class="trophy-punchline">${jokes[bestIdx].punchline}</div>
+        <div class="trophy-setup">${best.setup}</div>
+        <div class="trophy-punchline">${best.punchline}</div>
       `;
     }
 
-    function showVoteRow() {
-      const voteRow = document.getElementById('voteRow');
-      const already = votes[currentIdx] !== undefined;
-      const upLabel = upLabels[Math.floor(Math.random() * upLabels.length)];
-      const downLabel = downLabels[Math.floor(Math.random() * downLabels.length)];
-      voteRow.style.display = 'flex';
-      voteRow.innerHTML = `
-        <button id="voteUp" class="btn btn-vote up ${already && votes[currentIdx] > 0 ? 'voted-up' : ''}"
-          onclick="vote(1)" ${already ? 'disabled' : ''}>${upLabel}</button>
-        <button id="voteDown" class="btn btn-vote down ${already && votes[currentIdx] < 0 ? 'voted-down' : ''}"
-          onclick="vote(-1)" ${already ? 'disabled' : ''}>${downLabel}</button>
-      `;
+    // ── Mode switching ───────────────────────────────────────────────────────────
+
+    function switchMode(mode) {
+      if (mode === currentMode) return;
+      currentMode = mode;
+
+      // Update body class
+      document.body.className = `mode-${mode}`;
+
+      // Update mode buttons
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.id === `btn-mode-${mode}`);
+      });
+
+      // Update title and header emoji
+      document.getElementById('title').textContent = modeConfig[mode].title;
+      document.getElementById('emoji').textContent = modeConfig[mode].emoji;
+
+      // Reset deck and start fresh
+      deck = [];
+      startNewJoke();
     }
 
-    function nextJoke() {
-      const box = document.getElementById('jokeBox');
-      const btn = document.getElementById('mainBtn');
-      const emojiEl = document.getElementById('emoji');
-      const voteRow = document.getElementById('voteRow');
+    // ── Init ─────────────────────────────────────────────────────────────────────
 
-      // resume audio context on first interaction (browser requirement)
-      if (ctx.state === 'suspended') ctx.resume();
-
-      if (state === 'idle' || state === 'punchline') {
-        currentJoke = pickJoke();
-        box.innerHTML = `<p class="setup">${currentJoke.setup}</p>`;
-        btn.textContent = "🤔 What's the answer?";
-        emojiEl.textContent = '🤔';
-        voteRow.style.display = 'none';
-        state = 'setup';
-      } else if (state === 'setup') {
-        jokeCount++;
-        box.innerHTML = `
-          <p class="setup">${currentJoke.setup}</p>
-          <p class="punchline">${currentJoke.punchline} 😄</p>
-        `;
-        btn.textContent = 'Another joke! 🎉';
-        emojiEl.textContent = randomEmoji();
-        document.getElementById('counter').textContent =
-          jokeCount === 1 ? '1 joke told!' : `${jokeCount} jokes told!`;
-        showVoteRow();
-        state = 'punchline';
-      }
-    }
+    startNewJoke();
   </script>
 </body>
 </html>
